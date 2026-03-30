@@ -1,6 +1,8 @@
+# text_mfa_phoneme/convert_mfa_text.py
+# 音素をMFA形式に変換するためのコード
+
 import os
 from .phoneme_map import PHONEME_MAP
-
 
 def convert_to_mfa(phoneme_str: str) -> str:
     tokens = phoneme_str.split()
