@@ -1,11 +1,9 @@
-# テスト用のコード
-# 消してもいいし、残してもいい
 
-from src.audio_analysis.librosa_v import run_librosa_analysis
+from src.audio_table.run_audio_table_pipeline import main as run_audio_table_pipeline
 
 
 def main():
-    run_librosa_analysis()
+    run_audio_table_pipeline()
 
 
 if __name__ == "__main__":

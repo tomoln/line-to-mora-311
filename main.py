@@ -7,6 +7,7 @@ from src.text_mfa_timestamp.Montreal_Forced_Aligner import run_mfa_alignment
 from src.text_mora.phoneme_to_mora import run_phoneme_to_mora
 from src.text_mora_jp.mora_to_japanese import run_mora_to_japanese
 from src.audio_analysis.librosa_v import run_librosa_analysis
+from src.audio_table.run_audio_table_pipeline import main as run_audio_table_pipeline
 
 
 def main():
@@ -16,6 +17,7 @@ def main():
     moras = run_phoneme_to_mora(phonemes)  # ← ★渡す
     run_mora_to_japanese(moras)
     run_librosa_analysis()
+    run_audio_table_pipeline()
 
 
 if __name__ == "__main__":

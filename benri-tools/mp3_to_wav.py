@@ -3,8 +3,8 @@
 
 import subprocess
 
-input_file = "input.mp3"
-output_file = "output.wav"
+input_file = "input/001.mp3"
+output_file = "001.wav"
 
 subprocess.run([
     "ffmpeg",
