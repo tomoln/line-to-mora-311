@@ -66,3 +66,4 @@ def run_phoneme_to_mora():
     phonemes = load_mfa_timestamp()
     moras = phoneme_to_mora(phonemes)
     save_mora(moras)
+    return moras   # ← これ追加

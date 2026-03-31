@@ -5,13 +5,15 @@ from src.text_phoneme.pyopenjtalk import kana_to_phoneme
 from src.text_mfa_phoneme.convert_mfa_text import convert_and_save
 from src.text_mfa_timestamp.Montreal_Forced_Aligner import run_mfa_alignment
 from src.text_mora.phoneme_to_mora import run_phoneme_to_mora
+from src.text_mora_jp.mora_to_japanese import run_mora_to_japanese
 
 
 def main():
     phoneme_str = kana_to_phoneme()  # 006を返す想定
     convert_and_save(phoneme_str)    # 007生成
     run_mfa_alignment()              # 008生成
-    run_phoneme_to_mora()
+    moras = run_phoneme_to_mora()      # ← 受け取る
+    run_mora_to_japanese(moras)        # ← 渡す
 
 
 if __name__ == "__main__":
