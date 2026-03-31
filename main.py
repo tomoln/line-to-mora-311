@@ -6,14 +6,16 @@ from src.text_mfa_phoneme.convert_mfa_text import convert_and_save
 from src.text_mfa_timestamp.Montreal_Forced_Aligner import run_mfa_alignment
 from src.text_mora.phoneme_to_mora import run_phoneme_to_mora
 from src.text_mora_jp.mora_to_japanese import run_mora_to_japanese
+from src.audio_analysis.librosa_v import run_librosa_analysis
 
 
 def main():
-    phoneme_str = kana_to_phoneme()  # 006を返す想定
-    convert_and_save(phoneme_str)    # 007生成
-    run_mfa_alignment()              # 008生成
-    moras = run_phoneme_to_mora()      # ← 受け取る
-    run_mora_to_japanese(moras)        # ← 渡す
+    phoneme_str = kana_to_phoneme()   # 006
+    convert_and_save(phoneme_str)     # 007
+    phonemes = run_mfa_alignment()    # ← ★受け取る（重要）
+    moras = run_phoneme_to_mora(phonemes)  # ← ★渡す
+    run_mora_to_japanese(moras)
+    run_librosa_analysis()
 
 
 if __name__ == "__main__":

@@ -1,8 +1,9 @@
 # text_mfa_timestamp/Montreal_Forced_Aligner.py
-# Montreal Forced Aligner を使って音素のタイムスタンプを取得するコード
+# Montreal Forced Aligner を使って音素タイムスタンプを取得（メモリ + ファイル出力）
 
 import os
 import subprocess
+import shutil
 
 
 def run_mfa_alignment():
@@ -18,17 +19,13 @@ def run_mfa_alignment():
     os.makedirs("confirm", exist_ok=True)
 
     # ===== MFA用 corpus 構成 =====
-    # MFAは wav + 同名 txt が必要
     wav_dst = os.path.join(corpus_dir, "001.wav")
     txt_dst = os.path.join(corpus_dir, "001.lab")
 
-    # コピー
-    import shutil
     shutil.copy(wav_path, wav_dst)
     shutil.copy(text_path, txt_dst)
 
     # ===== MFA 実行 =====
-    # ※事前に acoustic model / dictionary は用意必要
     command = [
         "mfa",
         "align",
@@ -40,28 +37,63 @@ def run_mfa_alignment():
         "--overwrite"
     ]
 
+    print("Running MFA alignment...")
     subprocess.run(command, check=True)
 
-    # ===== 結果取得（TextGrid）=====
+    # ===== TextGrid 読み込み =====
     tg_path = os.path.join(output_dir, "001.TextGrid")
 
-    # 簡易パース（必要最低限）
-    timestamps = []
+    if not os.path.exists(tg_path):
+        raise FileNotFoundError(f"TextGrid not found: {tg_path}")
+
     with open(tg_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
 
+    # ===== phoneme（phones tier）抽出 =====
+    timestamps = []
+    in_phone_tier = False
+
     for i, line in enumerate(lines):
-        if "intervals [" in line:
-            xmin = float(lines[i+1].split("=")[1].strip())
-            xmax = float(lines[i+2].split("=")[1].strip())
-            text = lines[i+3].split("=")[1].strip().replace('"', '')
+        line = line.strip()
 
-            if text != "":
-                timestamps.append(f"{text} {xmin:.3f} {xmax:.3f}")
+        # --- tier判定 ---
+        if 'name = "phones"' in line:
+            in_phone_tier = True
+            continue
 
-    # ===== 保存 =====
+        if 'name =' in line and 'phones' not in line:
+            in_phone_tier = False
+
+        if not in_phone_tier:
+            continue
+
+        # --- interval抽出 ---
+        if line.startswith("intervals ["):
+            xmin = float(lines[i + 1].split("=")[1].strip())
+            xmax = float(lines[i + 2].split("=")[1].strip())
+            text = lines[i + 3].split("=")[1].strip().replace('"', '')
+
+            # 無音除外
+            if text in ["", "sil", "sp"]:
+                continue
+
+            timestamps.append((text, xmin, xmax))
+
+    # ===== 確認用ファイル出力 =====
     out_path = "confirm/008_text_mfa_timestamp.txt"
     with open(out_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(timestamps))
+        for p, s, e in timestamps:
+            f.write(f"{p} {s:.3f} {e:.3f}\n")
 
     print("timestamp saved →", out_path)
+
+    # ===== メモリ返却 =====
+    return timestamps
+
+
+# ===== 単体実行用 =====
+if __name__ == "__main__":
+    result = run_mfa_alignment()
+    print("\n--- preview ---")
+    for r in result[:10]:
+        print(r)
