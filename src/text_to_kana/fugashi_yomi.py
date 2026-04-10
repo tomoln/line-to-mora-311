@@ -2,6 +2,7 @@
 # fugashiを使ってテキストをカタカナに変換するコード
 
 from src.text_clean.no_noise_neologdn import clean_text
+from src.whisper.whisper_audio_to_str import find_input_wav
 from fugashi import Tagger
 import os
 
@@ -33,7 +34,7 @@ def save_confirm_text(filename: str, text: str):
         f.write(text)
 
 def main():
-    audio_path = "input/001.wav"
+    audio_path = find_input_wav()
     kana_text = text_to_kana(audio_path)
     print("kana→", kana_text)
 

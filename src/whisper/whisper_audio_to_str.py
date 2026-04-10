@@ -3,9 +3,19 @@
 
 import whisper
 import os
+import glob
 
 # モデルは外に出して高速化
 model = whisper.load_model("small")
+
+
+def find_input_wav(input_dir: str = "input") -> str:
+    files = glob.glob(os.path.join(input_dir, "*.wav"))
+    if len(files) == 0:
+        raise FileNotFoundError(f"{input_dir} にwavファイルが見つかりません")
+    if len(files) > 1:
+        raise ValueError(f"{input_dir} にwavファイルが複数あります: {files}")
+    return files[0]
 
 
 def Whisper_audio_to_str(audio_path: str) -> str:
@@ -27,6 +37,6 @@ def save_confirm_text(filename: str, text: str):
 
 
 if __name__ == "__main__":
-    audio_path = os.path.join("input", "001.wav")
+    audio_path = find_input_wav()
     text = Whisper_audio_to_str(audio_path)
     print(text)

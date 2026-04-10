@@ -3,8 +3,10 @@
 
 import subprocess
 
-input_file = "input/001.mp3"
-output_file = "001.wav"
+import os
+
+input_file = "benri-tools/g_22.mp3"
+output_file = os.path.splitext(input_file)[0] + ".wav"
 
 subprocess.run([
     "ffmpeg",

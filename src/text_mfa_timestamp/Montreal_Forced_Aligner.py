@@ -5,10 +5,12 @@ import os
 import subprocess
 import shutil
 
+from src.whisper.whisper_audio_to_str import find_input_wav
+
 
 def run_mfa_alignment():
     # ===== パス設定 =====
-    wav_path = "input/001.wav"
+    wav_path = find_input_wav()
     text_path = "confirm/004_text_clean.txt"
 
     corpus_dir = "mfa_tmp/corpus"

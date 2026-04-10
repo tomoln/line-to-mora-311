@@ -7,10 +7,11 @@ import pyopenjtalk
 # 既存のカナ生成を利用
 from src.text_to_kana.fugashi_yomi import text_to_kana
 from src.text_mfa_phoneme.convert_mfa_text import convert_and_save
+from src.whisper.whisper_audio_to_str import find_input_wav
 
 
 def kana_to_phoneme():
-    audio_path = "input/001.wav"
+    audio_path = find_input_wav()
 
     kana_text = text_to_kana(audio_path)
 

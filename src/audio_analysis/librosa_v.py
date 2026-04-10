@@ -8,10 +8,10 @@ from .rms import calc_rms
 from .f0 import calc_f0
 from .spectral_centroid import calc_spectral_centroid
 from .ZCR import calc_zcr
+from src.whisper.whisper_audio_to_str import find_input_wav
 
 INPUT_PATH = "confirm/010_mora_to_japanese.txt"
 OUTPUT_PATH = "confirm/011_add_audio_parameters.txt"
-AUDIO_PATH = "input/001.wav"
 
 
 def load_mora_file(path):
@@ -58,7 +58,7 @@ def save_results(moras, path):
 
 
 def run_librosa_analysis():
-    y, sr = librosa.load(AUDIO_PATH, sr=None)
+    y, sr = librosa.load(find_input_wav(), sr=None)
     moras = load_mora_file(INPUT_PATH)
 
     results = []

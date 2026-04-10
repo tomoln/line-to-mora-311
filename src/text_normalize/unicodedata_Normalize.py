@@ -1,7 +1,7 @@
 # text_normalize/unicodedata_Normalize.py
 # unicodedataを使ってテキストを正規化するコード
 
-from src.whisper.whisper_audio_to_str import Whisper_audio_to_str
+from src.whisper.whisper_audio_to_str import Whisper_audio_to_str, find_input_wav
 import unicodedata
 import os
 
@@ -22,7 +22,7 @@ def normalize_text(audio_path: str) -> str:
     return text
 
 def main():
-    audio_path = "input/001.wav"
+    audio_path = find_input_wav()
     normalized = normalize_text(audio_path)
     print("normalized→", normalized)
 

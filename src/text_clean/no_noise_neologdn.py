@@ -1,7 +1,7 @@
 # text_clean/no_noise_neologdn.py
 # 前段の結果を取得して、neologdnで整形する関数を定義
 
-from src.text_normalize.unicodedata_Normalize import normalize_text
+from src.text_normalize.unicodedata_Normalize import normalize_text, find_input_wav
 from src.text_replace.correct_text import correct_text
 import neologdn
 import os
@@ -31,7 +31,7 @@ def clean_text(audio_path: str) -> str:
     return text
 
 def main():
-    audio_path = "input/001.wav"
+    audio_path = find_input_wav()
     cleaned = clean_text(audio_path)
     print("cleaned→", cleaned)
 
